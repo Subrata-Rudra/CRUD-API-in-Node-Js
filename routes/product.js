@@ -1,7 +1,8 @@
 const express = require("express");
 const connection = require("../connection");
 const router = express.Router();
-
+const cors = require("cors");
+router.use(cors());
 
 router.post('/create', (req, res, next) => {
     let product = req.body;
@@ -10,7 +11,6 @@ router.post('/create', (req, res, next) => {
         if(!err)
         {
             return res.status(200).json({message: "Product added successfully"});
-            // return res.status(200);
         }
         else
         {
@@ -20,7 +20,6 @@ router.post('/create', (req, res, next) => {
 });
 
 router.get('/read', (req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "*"); //to enable CORS(cross origin resource sharing)
     let query = "select * from product"; //sql query to retrieve data from table
     connection.query(query, (err, results) => { //running the sql query
         if(!err)
@@ -35,10 +34,6 @@ router.get('/read', (req, res, next) => {
 });
 
 router.patch('/update/:id', (req, res, next) => {
-    // res.header("Access-Control-Allow-Origin", "*"); //to enable CORS(cross origin resource sharing)
-    // res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    // res.header("Access-Control-Allow-Origin", "http://127.0.0.1:5502/"); //newly added on 07-12-2022 22:59 pm
-
     const id = req.params.id;
     let product = req.body;
     let query = "update product set name=?, description=?, price=? where id=?"; //sql query to update data from table
